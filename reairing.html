@@ -1,0 +1,254 @@
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repairiing Services</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="app">
+        <div class="header">
+            <i class="fa fa-arrow-left" onclick="document.location='home.html'"></i>
+        </div>
+
+        <div class="search-box">
+            <i class="fa fa-search"></i>
+            <input type="text" placeholder="Cleaning" onkeyup="search()" id="search-item">
+        </div>
+
+        <!-- SERVICE CARDS -->
+        <div class="card"
+            onclick="saveBooking('Wade Warren', 'Car Repairiing', '₹400', 'https://i.ibb.co/jwnN7ZG/cleaner1.png', 'repairingbooking1.html')">
+            <img src="https://i.ibb.co/jwnN7ZG/cleaner1.png" class="avatar">
+            <div class="card-content">
+                <p class="name">Wade Warren</p>
+                <h3>Car Repairiing</h3>
+                <p class="price">₹400</p>
+            </div>
+        </div>
+
+        <div class="card"
+            onclick="saveBooking('Freida Varnes', 'Motorcycle Repairing', '₹300', 'https://i.ibb.co/d7FfTc6/cleaner2.png', 'repairingbooking2.html')">
+            <img src="https://i.ibb.co/d7FfTc6/cleaner2.png" class="avatar">
+            <div class="card-content">
+                <p class="name">Freida Varnes</p>
+                <h3>Motorcycle Repairing</h3>
+                <p class="price">₹300</p>
+            </div>
+        </div>
+
+        <div class="card"
+            onclick="saveBooking('Rodolfo Goode', 'House Repairing', '₹300', 'https://i.ibb.co/zbbtS0P/cleaner3.png', 'repairingbooking3.html')">
+            <img src="https://i.ibb.co/zbbtS0P/cleaner3.png" class="avatar">
+            <div class="card-content">
+                <p class="name">Rodolfo Goode</p>
+                <h3>House Repairing</h3>
+                <p class="price">₹300</p>
+            </div>
+        </div>
+
+        <div class="card"
+            onclick="saveBooking('Alfonzo Schuessler', 'Walls Repairing', '₹400', 'https://i.ibb.co/kKYBwf3/cleaner4.png', 'repairingbooking4.html')">
+            <img src="https://i.ibb.co/kKYBwf3/cleaner4.png" class="avatar">
+            <div class="card-content">
+                <p class="name">Alfonzo Schuessler</p>
+                <h3>Walls Repairing</h3>
+                <p class="price">₹400</p>
+            </div>
+        </div>
+
+        <div class="card"
+            onclick="saveBooking('Clinton Mcclure', 'Machine Repairing', '₹400', 'https://i.ibb.co/kKYBwf3/cleaner4.png', 'repairingbooking5.html')">
+            <img src="https://i.ibb.co/kKYBwf3/cleaner4.png" class="avatar">
+            <div class="card-content">
+                <p class="name">Clinton Mcclure</p>
+                <h3>Machine Repairing</h3>
+                <p class="price">₹400</p>
+            </div>
+        </div>
+
+        
+
+    </div>
+
+    <script>
+        function search() {
+            const searchbox = document.getElementById("search-item").value.toUpperCase();
+            const cards = document.querySelectorAll(".card");
+
+            cards.forEach(card => {
+                const title = card.querySelector("h3").textContent.toUpperCase();
+                card.style.display = title.includes(searchbox) ? "" : "none";
+            });
+        }
+
+        function saveBooking(name, service, price, image, page) {
+            let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+            bookings.push({
+                name: name,
+                service: service,
+                price: price,
+                image: image,
+                status: "Upcoming"
+            });
+
+            localStorage.setItem("bookings", JSON.stringify(bookings));
+
+            window.location.href = page;
+        }
+    </script>
+
+</body>
+
+</html>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background: #0f0f17;
+    padding: 20px;
+    color: white;
+}
+
+.app {
+    max-width: 420px;
+    margin: auto;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.header i {
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.header i:active {
+    transform: scale(0.88);
+}
+
+/* SEARCH BOX */
+.search-box {
+    background: #1c1c27;
+    padding: 14px 16px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid #2d2d38;
+    box-shadow: 0 0 8px rgba(150, 150, 200, 0.1);
+}
+
+.search-box input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #f1f1f1;
+    font-size: 15px;
+}
+
+.search-box i {
+    color: #90909c;
+    font-size: 17px;
+}
+
+/* SERVICE CARDS */
+.card {
+    background: #1c1c27;
+    padding: 16px;
+    border-radius: 18px;
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+    border: 1px solid #2a2a36;
+    transition: 0.25s ease;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 18px rgba(150, 150, 255, 0.18);
+}
+
+.avatar {
+    width: 75px;
+    height: 75px;
+    border-radius: 16px;
+    object-fit: cover;
+}
+
+/* CARD CONTENT */
+.card-content .name {
+    font-size: 12px;
+    opacity: 0.65;
+}
+
+.card-content h3 {
+    font-size: 18px;
+    margin: 4px 0;
+    font-weight: 600;
+}
+
+.price {
+    color: #c08aff;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* BOOKMARK ICON (Optional future use) */
+.bookmark {
+    color: #b474ff;
+    font-size: 22px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    cursor: pointer;
+}
+
+/* RESPONSIVE BOOST */
+@media (max-width: 360px) {
+    .avatar {
+        width: 65px;
+        height: 65px;
+    }
+
+    .card {
+        padding: 13px;
+        gap: 12px;
+    }
+
+    .card-content h3 {
+        font-size: 16px;
+    }
+}
+
+</style>

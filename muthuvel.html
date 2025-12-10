@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Calendar</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h2 class="header-title">
+            <span class="icon">📅</span> My Calendar
+        </h2>
+
+        <div class="calendar-box">
+            <div class="month-row">
+                <h3 id="month-year">December 2024</h3>
+                <div class="nav-btn">
+                    <span id="prev-month">◀</span>
+                    <span id="next-month">▶</span>
+                </div>
+            </div>
+
+            <div class="weekdays">
+                <span>Mo</span><span>Tu</span><span>We</span>
+                <span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+            </div>
+
+            <div id="calendar" class="days"></div>
+        </div>
+
+        <!-- <div class="section-title">
+            Service Booking (2) <span class="see-all">See All</span>
+        </div> -->
+        <div class="section-title">
+            Service Booking (<span id="booking-count">0</span>)
+            <span class="see-all" onclick="location.href='bookings.html'">See All</span>
+        </div>
+        
+        <div id="booking-list"></div>
+
+
+        <!-- Booking Cards -->
+        <!-- <div class="booking-card">
+            <img src="https://i.imgur.com/QW5LzMd.png">
+            <div class="details">
+                <h4>House Cleaning</h4>
+                <p>Jenny Wilson</p>
+                <span class="status">Upcoming</span>
+            </div>
+            <div class="chat-icon">💬</div>
+        </div>
+
+        <div class="booking-card">
+            <img src="https://i.imgur.com/OiZ8Q1f.png">
+            <div class="details">
+                <h4>Appliance Service</h4>
+                <p>Alex Nguyen</p>
+                <span class="status">Upcoming</span>
+            </div>
+            <div class="chat-icon">💬</div>
+        </div>
+
+    </div> -->
+
+    <!-- Bottom Navbar -->
+    <!-- <div class="bottom-nav">
+        <div class="nav-item">🏠<br>Home</div>
+        <div class="nav-item">📑<br>Bookings</div>
+        <div class="nav-item active">📆<br>Calendar</div>
+        <div class="nav-item">📩<br>Inbox</div>
+        <div class="nav-item">👤<br>Profile</div>
+    </div> -->
+
+    <script>
+        const calendar = document.getElementById("calendar");
+        const monthYear = document.getElementById("month-year");
+
+        let date = new Date();
+        let currentMonth = date.getMonth();
+        let currentYear = date.getFullYear();
+
+        // Render Calendar
+        function loadCalendar(month, year) {
+            calendar.innerHTML = "";
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const numDays = new Date(year, month + 1, 0).getDate();
+
+            monthYear.textContent =
+                `${new Date(year, month).toLocaleString('default', { month: 'long' })} ${year}`;
+
+            // Correct shift for Monday-first calendar
+            const offset = (firstDay === 0 ? 6 : firstDay - 1);
+
+            // Empty boxes
+            for (let i = 0; i < offset; i++) {
+                calendar.innerHTML += `<div></div>`;
+            }
+
+            // Add Dates
+            for (let i = 1; i <= numDays; i++) {
+                const day = document.createElement("div");
+                day.textContent = i;
+
+                day.onclick = () => {
+                    document.querySelectorAll(".days div").forEach(d => d.classList.remove("selected"));
+                    day.classList.add("selected");
+                };
+
+                calendar.appendChild(day);
+            }
+        }
+
+        loadCalendar(currentMonth, currentYear);
+
+        // Month Navigation
+        document.getElementById("next-month").onclick = () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            loadCalendar(currentMonth, currentYear);
+        };
+
+        document.getElementById("prev-month").onclick = () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            loadCalendar(currentMonth, currentYear);
+        };
+    </script>
+<script>
+    function loadCalendarBookings() {
+        let list = document.getElementById("booking-list");
+        let count = document.getElementById("booking-count");
+
+        list.innerHTML = "";
+
+        let bookings = JSON.parse(localStorage.getItem("bookings")) || [];
+
+        // Count upcoming only
+        let upcoming = bookings.filter(b => b.status === "Upcoming");
+        count.textContent = upcoming.length;
+
+        if (upcoming.length === 0) {
+            list.innerHTML = `<p style="opacity:0.6; margin-top:10px;">No upcoming bookings</p>`;
+            return;
+        }
+
+        // Print booking cards
+        upcoming.forEach((b, index) => {
+            let card = `
+                <div class="booking-card">
+                    <img src="${b.image}">
+                    <div class="details">
+                        <h4>${b.service}</h4>
+                        <p>${b.name}</p>
+                       
+                    </div>
+                  <div class="chat-icon"onclick="sendWhatsApp(${index})">Meassage</div>
+                </div>
+            `;
+            list.innerHTML += card;
+        });
+    }
+
+    // WhatsApp chat
+    function sendWhatsApp(i) {
+        let bookings = JSON.parse(localStorage.getItem("bookings"));
+        let b = bookings[i];
+
+        let message = `Hi! I want to talk about my booking:
+Service: ${b.service}
+Name: ${b.name}
+Price: ${b.price}`;
+
+        window.open("https://wa.me/916381893332?text=" + encodeURIComponent(message));
+    }
+
+    loadCalendarBookings();
+</script>
+
+</body>
+
+
+</html>
+<style>
+   * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: #0d0d12;
+    color: #ffffff;
+}
+
+.container {
+    padding: 22px;
+    padding-bottom: 140px;
+}
+
+/* Header */
+.header-title {
+    font-size: 26px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.header-title .icon {
+    font-size: 32px;
+}
+
+/* Calendar Box */
+.calendar-box {
+    background: #18181f;
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 0 18px rgba(162, 89, 255, 0.15);
+}
+
+/* Month Row */
+.month-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.month-row h3 {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.nav-btn span {
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.nav-btn span:hover {
+    background: #2e2e39;
+}
+
+/* Weekdays */
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    opacity: 0.6;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Calendar Days */
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    row-gap: 15px;
+}
+
+.days div {
+    width: 42px;
+    height: 42px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #15151c;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.days div:hover {
+    background: #6a34ff;
+}
+
+.days div.selected {
+    background: #a259ff;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(162, 89, 255, 0.5);
+}
+
+/* Section Title */
+.section-title {
+    margin: 24px 0 12px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.see-all {
+    float: right;
+    font-size: 14px;
+    color: #a259ff;
+    cursor: pointer;
+}
+
+/* Booking Card */
+.booking-card {
+    background: #1c1c23;
+    padding: 16px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+    transition: 0.3s;
+    box-shadow: 0 0 15px rgba(162, 89, 255, 0.1);
+}
+
+.booking-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px rgba(162, 89, 255, 0.2);
+}
+
+.booking-card img {
+    width: 65px;
+    height: 65px;
+    border-radius: 15px;
+    object-fit: cover;
+}
+
+.details {
+    flex: 1;
+    margin-left: 14px;
+}
+
+.details h4 {
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.details p {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+/* WhatsApp Button */
+.chat-icon {
+    background: #25D366;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.25s;
+}
+
+.chat-icon:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+</style>
