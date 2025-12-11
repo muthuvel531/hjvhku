@@ -1,17 +1,25 @@
 
-
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Account</title>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <style>
+    <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -147,102 +155,83 @@
             font-size: 15px;
         }
     </style>
-</head>
-<!--  --><!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account</title>
-    <!-- <link rel="stylesheet" href="style.css"> -->
-
-    <!-- Google Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-    <!-- Poppins Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+    </style>
 </head>
 
 <body>
 
-    <div class="containe">
+    <div id="root"></div>
 
+    <script type="text/babel">
 
+        // 🔥 Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqFIyVhPXx1r5W4fJM4nOii09AIxi0vKQ",
+            authDomain: "contactform-85948.firebaseapp.com",
+            databaseURL: "https://contactform-85948-default-rtdb.firebaseio.com",
+            projectId: "contactform-85948",
+            storageBucket: "contactform-85948.firebasestorage.app",
+            messagingSenderId: "901007557564",
+            appId: "1:901007557564:web:25b92b3224f24d85be21b9"
+        };
 
-        <h1>Create your<br>Account</h1>
+        firebase.initializeApp(firebaseConfig);
 
-        <div class="container">
-            <form id="contactForm">
-                <div class="alert">Create tha account</div>
+        const dbRef = firebase.database().ref("Users");
 
-                <!-- Email -->
-                <div class="inputBox">
-                    <!-- <span class="material-icons icon" >email</span> -->
-                    <input type="text" placeholder="Username" id="name" required>
+        function Hello() {
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+
+                const username = e.target.username.value;
+                const phone = e.target.phone.value;
+
+                // Save locally
+                localStorage.setItem("username", username);
+                localStorage.setItem("phone", phone);
+
+                // Save to Firebase
+                dbRef.push({
+                    username: username,
+                    phone: phone
+                });
+
+                alert("Account created successfully!");
+                window.location.href = "home.html";
+            };
+
+            return (
+                <div className="containe">
+                    <h1>Create your<br />Account</h1>
+
+                    <form onSubmit={handleSubmit}>
+
+                        <div className="inputBox">
+                            <input type="text" name="username" placeholder="Username" required />
+                        </div>
+
+                        <div className="inputBox">
+                            <input type="number" name="phone" placeholder="Phone number" required />
+                        </div>
+
+                        <button className="btn" type="submit">Sign Up</button>
+
+                    </form>
+
+                    <p className="signin-text">
+                        Already have an account?
+                        <a href="signin.html" style={{ color: "#b97aff" }}> Sign in</a>
+                    </p>
                 </div>
+            );
+        }
 
-                <!-- Password -->
-                <div class="inputBox">
-                    <!-- <span class="material-icons icon">lock</span> -->
-                    <input type="number" placeholder="phonenumber" id="emailid" required>
-                    <!-- <span class="material-icons eye">visibility_off</span> -->
-                </div>
-                <!-- <div class="inputBox">
-                <textarea id="msgContent" rows="5" placeholder="Message"></textarea>
-            </div> -->
+        ReactDOM.createRoot(document.getElementById("root")).render(<Hello />);
 
-                <!-- Remember Me -->
-                <label class="remember">
-                    <input type="checkbox">
-                    <span>Remember me</span>
-                </label>
-
-                <!-- Sign Up Button -->
-                <div class="inputBo">
-                    <button class="btn" type="submit">Sign up</button>
-                </div>
-
-            </form>
-        </div>
-
-        <!-- OR Divider -->
-        <div class="divider">
-            <span></span>
-            <p>or continue with</p>
-            <span></span>
-        </div>
-
-
-
-        <!-- Sign in Link -->
-        <p class="signin-text">Already have an account? <a href="#" onclick="document.location='signin.html'">Sign
-                in</a></p>
-
-    </div>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-    <script>
-        document.getElementById("contactForm").addEventListener("submit", function (e) {
-            e.preventDefault();
-
-            let username = document.getElementById("name").value;
-            let phone = document.getElementById("emailid").value;
-
-            // Save username
-            localStorage.setItem("username", username);
-
-            alert("Account created successfully!");
-
-            // Redirect to home page
-            window.location.href = "home.html";
-        });
     </script>
 
-    <script src="./mail.js"></script>
-
-
 </body>
+
+</html>
 
